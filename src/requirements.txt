@@ -1,0 +1,3 @@
+kopf
+pydantic[dotenv]
+kubernetes

@@ -1,0 +1,1 @@
+kopf run --all-namespaces --liveness http://0.0.0.0:8080/healthz main.py

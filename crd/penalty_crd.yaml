@@ -1,0 +1,31 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: penaltys.priority.hae.com
+spec:
+  scope: Cluster
+  group: priority.hae.com
+  names:
+    kind: Penalty
+    plural: penaltys
+    singular: penalty
+    shortNames:
+      - pps
+      - pp
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+              properties:
+                value:
+                  type: integer
+            status:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true

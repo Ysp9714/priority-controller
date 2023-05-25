@@ -1,0 +1,6 @@
+apiVersion: priority.hae.com/v1
+kind: Penalty
+metadata:
+  name: default
+spec:
+  value: 100
