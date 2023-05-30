@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: tf-cpu  # Name of this Workflow
+spec:
+  schedulerName: volcano
+  podPriorityClassName: h-priority
+  queue: test
+  entrypoint: tf-cpu
+  templates:
+    - name: tf-cpu
+      container:
+        image: kimkihoon0515/tf-cpu:0.1
+        command: ["python","train.py"]
+        resources:
+          requests:
+            cpu: "2"

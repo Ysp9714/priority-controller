@@ -1,0 +1,279 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kubectl.kubernetes.io/default-container: main
+    scheduling.k8s.io/group-name: podgroup-2fb2364a-7559-4723-a5f2-2db6e92ab380
+    workflows.argoproj.io/node-id: tf-cpu
+    workflows.argoproj.io/node-name: tf-cpu
+  creationTimestamp: "2023-05-30T11:47:00Z"
+  labels:
+    workflows.argoproj.io/completed: "false"
+    workflows.argoproj.io/workflow: tf-cpu
+  name: tf-cpu
+  namespace: argo
+  ownerReferences:
+  - apiVersion: argoproj.io/v1alpha1
+    blockOwnerDeletion: true
+    controller: true
+    kind: Workflow
+    name: tf-cpu
+    uid: 2fb2364a-7559-4723-a5f2-2db6e92ab380
+  resourceVersion: "348627"
+  uid: 0b51ec7e-9283-43c5-88ec-cd258a87af8b
+spec:
+  containers:
+  - command:
+    - argoexec
+    - wait
+    - --loglevel
+    - info
+    - --log-format
+    - text
+    env:
+    - name: ARGO_POD_NAME
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.name
+    - name: ARGO_POD_UID
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.uid
+    - name: GODEBUG
+      value: x509ignoreCN=0
+    - name: ARGO_WORKFLOW_NAME
+      value: tf-cpu
+    - name: ARGO_CONTAINER_NAME
+      value: wait
+    - name: ARGO_TEMPLATE
+      value: '{"name":"tf-cpu","inputs":{},"outputs":{},"metadata":{},"container":{"name":"","image":"kimkihoon0515/tf-cpu:0.1","command":["python","train.py"],"resources":{"requests":{"cpu":"2"}}}}'
+    - name: ARGO_NODE_ID
+      value: tf-cpu
+    - name: ARGO_INCLUDE_SCRIPT_OUTPUT
+      value: "false"
+    - name: ARGO_DEADLINE
+      value: "0001-01-01T00:00:00Z"
+    - name: ARGO_PROGRESS_FILE
+      value: /var/run/argo/progress
+    - name: ARGO_PROGRESS_PATCH_TICK_DURATION
+      value: 1m0s
+    - name: ARGO_PROGRESS_FILE_TICK_DURATION
+      value: 3s
+    image: quay.io/argoproj/argoexec:v3.4.8
+    imagePullPolicy: IfNotPresent
+    name: wait
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /tmp
+      name: tmp-dir-argo
+      subPath: "0"
+    - mountPath: /var/run/argo
+      name: var-run-argo
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-bfg4q
+      readOnly: true
+  - command:
+    - /var/run/argo/argoexec
+    - emissary
+    - --loglevel
+    - info
+    - --log-format
+    - text
+    - --
+    - python
+    - train.py
+    env:
+    - name: ARGO_CONTAINER_NAME
+      value: main
+    - name: ARGO_TEMPLATE
+      value: '{"name":"tf-cpu","inputs":{},"outputs":{},"metadata":{},"container":{"name":"","image":"kimkihoon0515/tf-cpu:0.1","command":["python","train.py"],"resources":{"requests":{"cpu":"2"}}}}'
+    - name: ARGO_NODE_ID
+      value: tf-cpu
+    - name: ARGO_INCLUDE_SCRIPT_OUTPUT
+      value: "false"
+    - name: ARGO_DEADLINE
+      value: "0001-01-01T00:00:00Z"
+    - name: ARGO_PROGRESS_FILE
+      value: /var/run/argo/progress
+    - name: ARGO_PROGRESS_PATCH_TICK_DURATION
+      value: 1m0s
+    - name: ARGO_PROGRESS_FILE_TICK_DURATION
+      value: 3s
+    image: kimkihoon0515/tf-cpu:0.1
+    imagePullPolicy: IfNotPresent
+    name: main
+    resources:
+      requests:
+        cpu: "2"
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/argo
+      name: var-run-argo
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-bfg4q
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  initContainers:
+  - command:
+    - argoexec
+    - init
+    - --loglevel
+    - info
+    - --log-format
+    - text
+    env:
+    - name: ARGO_POD_NAME
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.name
+    - name: ARGO_POD_UID
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.uid
+    - name: GODEBUG
+      value: x509ignoreCN=0
+    - name: ARGO_WORKFLOW_NAME
+      value: tf-cpu
+    - name: ARGO_CONTAINER_NAME
+      value: init
+    - name: ARGO_TEMPLATE
+      value: '{"name":"tf-cpu","inputs":{},"outputs":{},"metadata":{},"container":{"name":"","image":"kimkihoon0515/tf-cpu:0.1","command":["python","train.py"],"resources":{"requests":{"cpu":"2"}}}}'
+    - name: ARGO_NODE_ID
+      value: tf-cpu
+    - name: ARGO_INCLUDE_SCRIPT_OUTPUT
+      value: "false"
+    - name: ARGO_DEADLINE
+      value: "0001-01-01T00:00:00Z"
+    - name: ARGO_PROGRESS_FILE
+      value: /var/run/argo/progress
+    - name: ARGO_PROGRESS_PATCH_TICK_DURATION
+      value: 1m0s
+    - name: ARGO_PROGRESS_FILE_TICK_DURATION
+      value: 3s
+    image: quay.io/argoproj/argoexec:v3.4.8
+    imagePullPolicy: IfNotPresent
+    name: init
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/argo
+      name: var-run-argo
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-bfg4q
+      readOnly: true
+  nodeName: minikube-m02
+  preemptionPolicy: PreemptLowerPriority
+  priority: 1000
+  priorityClassName: h-priority
+  restartPolicy: Never
+  schedulerName: volcano
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - emptyDir: {}
+    name: var-run-argo
+  - emptyDir: {}
+    name: tmp-dir-argo
+  - name: kube-api-access-bfg4q
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2023-05-30T11:47:03Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2023-05-30T11:47:00Z"
+    message: 'containers with unready status: [wait main]'
+    reason: ContainersNotReady
+    status: "False"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2023-05-30T11:47:00Z"
+    message: 'containers with unready status: [wait main]'
+    reason: ContainersNotReady
+    status: "False"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2023-05-30T11:47:00Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - image: kimkihoon0515/tf-cpu:0.1
+    imageID: ""
+    lastState: {}
+    name: main
+    ready: false
+    restartCount: 0
+    started: false
+    state:
+      waiting:
+        reason: PodInitializing
+  - image: quay.io/argoproj/argoexec:v3.4.8
+    imageID: ""
+    lastState: {}
+    name: wait
+    ready: false
+    restartCount: 0
+    started: false
+    state:
+      waiting:
+        reason: PodInitializing
+  hostIP: 192.168.58.3
+  initContainerStatuses:
+  - containerID: docker://7e108ca2ae205042e036c5cba2d9d15a285ef6c6acc00e1b04cc92b1965b28ec
+    image: quay.io/argoproj/argoexec:v3.4.8
+    imageID: docker-pullable://quay.io/argoproj/argoexec@sha256:d85c0319ee991320e762f6025d9ddae82dc76e9dd3d076c21e68ed850681e872
+    lastState: {}
+    name: init
+    ready: true
+    restartCount: 0
+    state:
+      terminated:
+        containerID: docker://7e108ca2ae205042e036c5cba2d9d15a285ef6c6acc00e1b04cc92b1965b28ec
+        exitCode: 0
+        finishedAt: "2023-05-30T11:47:02Z"
+        reason: Completed
+        startedAt: "2023-05-30T11:47:01Z"
+  phase: Pending
+  podIP: 10.244.1.20
+  podIPs:
+  - ip: 10.244.1.20
+  qosClass: Burstable
+  startTime: "2023-05-30T11:47:00Z"

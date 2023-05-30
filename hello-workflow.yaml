@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: python-test  # Name of this Workflow
+spec:
+  schedulerName: volcano
+  podPriorityClassName: h-priority
+  queue: test
+  entrypoint: python-test
+  templates:
+    - name: python-test
+      container:
+        image: kimkihoon0515/python-test:0.2
+        command: ["python","helloworld.py"]
+        resources:
+          requests:
+            cpu: "2"

@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: torch-cpu  # Name of this Workflow
+spec:
+  schedulerName: volcano
+  podPriorityClassName: h-priority
+  queue: test
+  entrypoint: torch-cpu
+  templates:
+    - name: torch-cpu
+      container:
+        image: kimkihoon0515/torch-cpu:0.4
+        command: ["python","train.py"]
+        resources:
+          requests:
+            cpu: "2"
