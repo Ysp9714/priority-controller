@@ -47,4 +47,4 @@ Controller는 Kubernetes 클러스터에서 작업의 스케줄링과 자원관�
             - 이 때 value값은 기존 1000에서 패널티를 제외한 값으로 갱신이 되는데 kubernetes에서 priorityclass는 변경이 불가능하다.
             - 따라서 기존의 h-priority 를 지우고 갱신한 value값을 넣어서 같은 이름으로 새로 만들어준다.
             - 그 다음부터 시작되는 podgroup은 새로운 h-priority의 value값을 참조해오게 된다.
-- 이해가 안가는점 : cluster_scoped_custrom_resource가 delete, get은 되는데 왜 create가 안됨.
+- create delete 모두 잘 됨 → value 필드에 integer 형식을 넣으면 적용됨.
