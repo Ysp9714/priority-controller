@@ -35,6 +35,11 @@ Controller는 Kubernetes 클러스터에서 작업의 스케줄링과 자원관�
 - 일단 argo workflow 형태에서 queue가 지정이 안 됨.
 - queue를 지정안하면 무조건 default queue로 들어감. volcano 기본 설정
 - queue field를 지정하는 방법을 생각해봐야함
+    - 해결
+        
+        https://github.com/volcano-sh/volcano/issues/2813
+        
+        annotaions에 [scheduling.volcano.sh/queue-name](http://scheduling.volcano.sh/queue-name)를 key로 하고 value에 queue 이름을 지정해서 넣어주면 적용됨.
 - value update가 안됨. json 형태로 patch 불가능함. get은 불러와지는데 create, patch가 안됨.
     - 대안
         - PodGroup이 생성이 되면 총 상태가 3개로 나뉘어진다.
