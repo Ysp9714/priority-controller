@@ -53,3 +53,24 @@ Controller는 Kubernetes 클러스터에서 작업의 스케줄링과 자원관�
             - 따라서 기존의 h-priority 를 지우고 갱신한 value값을 넣어서 같은 이름으로 새로 만들어준다.
             - 그 다음부터 시작되는 podgroup은 새로운 h-priority의 value값을 참조해오게 된다.
 - create delete 모두 잘 됨 → value 필드에 integer 형식을 넣으면 적용됨.
+
+# Penalty 정책
+
+- 패널티는 Race Condition에서만 증가한다. → PriorityClass value 변화
+    - Race Condition 여부는 Podgroup의 상태로 파악이 가능.
+        - Queue에 가용자원이 없으면 PodGroup은 Pending 상태로 지속된다.
+    - Pending 상태이면 Race Condition이다.
+    - Running 상태의 Penalty를 증가시킨다.
+    - penalty와 priorityclassname이 동일할 예정.
+- 증가된 패널티는 한 시간마다 1/2로 감소한다.
+- 문제점
+    
+    podgroup-0877c667-f042-42b2-9c7d-bfdaf36d6838 → 이런식으로 생성됨
+    
+    PodGroup 이름 정하는 부분 https://github.com/volcano-sh/volcano/blob/082d372f88c436f306766ede0d4414d8fb4613eb/vendor/volcano.sh/apis/pkg/apis/helpers/helpers.go#L174 
+    
+    이 부분을 조정해서 podgroupname을 namespace + ~~~ 로 수정 가능.
+    
+    1분마다 PodGroup의 상태를 확인해야함. 1분마다 패널티가 증가하고 한시간 마다 반감되므로 매 분 priorityclass를 삭제 재생성해야함.
+    
+    → 최종적으로 안정적이지 못하고 판단되므로 다른 방법을 고민해야함.
